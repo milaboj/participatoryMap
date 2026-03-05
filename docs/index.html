@@ -102,7 +102,7 @@
 
         // Fetch existing records when the window is loaded
         window.addEventListener("load", async function () {
-            let response = await fetch('https://pmap-28a9a9408e2b.herokuapp.com/api/get-record', {
+            let response = await fetch('https://partmap-4cd5b4bf8e5d.herokuapp.com/api/get-records', {
                 method: 'GET'
             });
 
@@ -203,7 +203,7 @@
 
             try {
                 // Send the POST request to add the new record
-                await fetch('https://pmap-28a9a9408e2b.herokuapp.com/api/add-record', settings);
+                await fetch('https://partmap-4cd5b4bf8e5d.herokuapp.com/api/get-records', settings);
             } catch (err) {
                 // Handle any errors that occur during the request
                 console.error(err);
