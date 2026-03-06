@@ -70,8 +70,8 @@
         <p>
             This map allows users to report features that hinder accessibility like extreme hills, potholes, or cracked sidewalks in Seattle. 
             Users can contribute their local knowledge by clicking on the map,
-            submitting their information, and viewing it represented as a red dot.
-            Existing contributions can also be viewed as red dots.
+            submitting their information, and viewing it represented as a purple dot.
+            Existing contributions can also be viewed as purple dots.
         </p> 
     </div>
     
@@ -109,7 +109,9 @@
                     'type': 'Feature',
                     'properties': {
                         'contributor': data.rows[i].contributor,
-                        'content': data.rows[i].content,
+                        'feature': data.rows[i].feature,
+                        'description': data.rows[i].description,
+                        'email': data.rows[i].email,
                     },
                     'geometry': {
                         'type': 'Point',
@@ -131,8 +133,8 @@
                 'type': 'circle',
                 'source': 'places',
                 'paint': {
-                    'circle-radius': 6,
-                    'circle-color': '#B42222'
+                    'circle-radius': 8,
+                    'circle-color': '#8122b4'
                 }
             });
         });
@@ -147,7 +149,7 @@
 
             popup = new maplibregl.Popup()
                 .setLngLat(coordinates)
-                .setHTML("<p><b>" + contributor + "</b> <i>said:</i> " + content + "</p>")
+                .setHTML("<p><b>" + contributor + "</b> <i>said:</i> " + feature + description + email + "</p>")
                 .addTo(map);
         });
 
@@ -180,13 +182,17 @@
         // Function to handle the submission of a new record
         async function submitNewRecord() {
             let contributor = document.getElementById('name').value;
-            let content = document.getElementById('feature').value;
+            let feature = document.getElementById('feature').value;
+            let description = document.getElementById('description').value;
+            let email = document.getElementById('email').value;
             let lngLat = popup.getLngLat();
 
             // Create a new URLSearchParams object and append the data to it
             let newRecord = new URLSearchParams();
             newRecord.append('contributor', contributor);
-            newRecord.append('content', content);
+            newRecord.append('feature', feature);
+            newRecord.append('description', description);
+            newRecord.append('email', email);
             newRecord.append('lng', lngLat.lng);
             newRecord.append('lat', lngLat.lat);
 
@@ -198,7 +204,7 @@
 
             try {
                 // Send the POST request to add the new record
-                await fetch('https://partmap-4cd5b4bf8e5d.herokuapp.com/api/get-records', settings);
+                await fetch('https://partmap-4cd5b4bf8e5d.herokuapp.com/api/edit-record', settings);
             } catch (err) {
                 // Handle any errors that occur during the request
                 console.error(err);
@@ -209,7 +215,9 @@
                     'type': 'Feature',
                     'properties': {
                         'contributor': contributor,
-                        'content': content,
+                        'feature': feature,
+                        'description': description,
+                        'email': email
                     },
                     'geometry': {
                         'type': 'Point',
